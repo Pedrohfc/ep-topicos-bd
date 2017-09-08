@@ -1,45 +1,59 @@
 package usp.each;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Properties;
 
-public class App 
+import usp.each.task.ConnectionFactory;
+import usp.each.task.OrderTask;
+
+public class App
 {
-    public static void main( String[] args ) throws Exception
+    public static void main(String[] args)
     {
-    	Class.forName("org.postgresql.Driver");
-    	String url = "jdbc:postgresql://localhost/northwind";
-    	Properties db = new Properties();
-    	db.put("user", "northwind_user");
-    	db.put("password", "thewindisblowing");
-        Connection c = DriverManager.getConnection(url, db);
-        queryTest(c);
-        c.close();
+        new App().startApp();
     }
-    
-    
-    public static void queryTest(Connection c) throws Exception
+
+    public void startApp()
     {
-    	PreparedStatement stmt = c.prepareStatement("select * from products limit 10");
-        ResultSet rs = stmt.executeQuery();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> closeApp()));
+        runTestQueries();
+    }
+
+    public void closeApp()
+    {
+        ConnectionFactory.closeConnection();
+        System.out.println("Tchau!");
+    }
+
+    public void runTestQueries()
+    {
+        try
+        {
+            OrderTask task = new OrderTask();
+            printQuery(task.ordersByDayOnMonth(4, 1998));
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void printQuery(ResultSet rs) throws Exception
+    {
         for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
         {
-        	System.out.print(rs.getMetaData().getColumnName(i)+" ");
+            System.out.print(rs.getMetaData().getColumnName(i) + " ");
         }
-        
+
         System.out.println("\n-----------");
-        
+
         while (rs.next())
         {
-        	for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
-        	{
-        		System.out.print(rs.getString(i)+ " ");
-        	}
-        	
-        	System.out.println();
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
+            {
+                System.out.print(rs.getString(i) + " ");
+            }
+
+            System.out.println();
         }
     }
 }

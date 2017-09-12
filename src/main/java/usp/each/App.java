@@ -29,7 +29,10 @@ public class App
         try
         {
             OrderTask task = new OrderTask();
-            printQuery(task.ordersByDayOnMonth(4, 1998));
+            int month = 12;
+            int year = 1997;
+            printQuery(task.ordersByDayOnMonth(month, year));
+            printQuery(task.rankByDayOnMonth(month, year));
         }
         catch (Exception ex)
         {

@@ -235,13 +235,14 @@ public class OrderTask {
      * @param year
      * @return
      */
-    public ResultSet topRankProductsByDayOnMonth(int month, int year) {
+    public ResultSet topRankProductsByDayOnMonth(int day, int month, int year) {
         try {
 
             String sql = "SELECT P.ProductName, RANK() OVER(ORDER BY SUM(OD.quantity) DESC) rank,"
                     + " SUM(OD.quantity), AVG(OD.UnitPrice), SUM(OD.quantity * OD.UnitPrice)"
                     + " FROM Orders O, Order_Details OD, Products P"
                     + " WHERE date_part('month', O.OrderDate) = ? AND date_part('year', O.OrderDate) = ?"
+                    + " AND date_part('day', O.OrderDate) = ?"
                     + " AND O.OrderId = OD.OrderId"
                     + " AND P.ProductID = OD.ProductID"
                     + " GROUP BY P.ProductName"
@@ -250,6 +251,7 @@ public class OrderTask {
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, month);
             stmt.setInt(2, year);
+            stmt.setInt(3, day);
             return stmt.executeQuery();
         } catch (Exception e) {
             e.printStackTrace();
@@ -264,13 +266,14 @@ public class OrderTask {
      * @param year
      * @return
      */
-    public ResultSet downRankProductsByDayOnMonth(int month, int year) {
+    public ResultSet downRankProductsByDayOnMonth(int day, int month, int year) {
         try {
 
             String sql = "SELECT P.ProductName, RANK() OVER(ORDER BY SUM(OD.quantity) ASC) rank,"
                     + " SUM(OD.quantity), AVG(OD.UnitPrice), SUM(OD.quantity * OD.UnitPrice)"
                     + " FROM Orders O, Order_Details OD, Products P"
                     + " WHERE date_part('month', O.OrderDate) = ? AND date_part('year', O.OrderDate) = ?"
+                    + " AND date_part('day', O.OrderDate) = ?"
                     + " AND O.OrderId = OD.OrderId"
                     + " AND P.ProductID = OD.ProductID"
                     + " GROUP BY P.ProductName"
@@ -279,6 +282,7 @@ public class OrderTask {
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, month);
             stmt.setInt(2, year);
+            stmt.setInt(3, day);
             return stmt.executeQuery();
         } catch (Exception e) {
             e.printStackTrace();

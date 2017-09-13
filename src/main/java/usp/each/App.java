@@ -26,10 +26,10 @@ public class App {
             int month = 10;
             int year = 1997;
             int day = 10;
-            printQuery(task.ordersByDayOnMonth(month, year));
-            printQuery(task.rankByDayOnMonth(month, year));
-            printQuery(task.topTenProducts(day, month, year));
-            printQuery(task.downTenProducts(day, month, year));
+//            printQuery(task.ordersByDayOnMonth(month, year));
+//            printQuery(task.rankByDayOnMonth(month, year));
+//            printQuery(task.topTenProducts(day, month, year));
+            printQuery(task.downRankProductsByDayOnMonth(day, month, year));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

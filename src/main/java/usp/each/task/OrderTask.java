@@ -289,4 +289,63 @@ public class OrderTask {
             return null;
         }
     }
+
+
+    /**
+     * Query de ranking de vendas produtos acumulado de cada mes
+     *
+     * @param month
+     * @param year
+     * @return
+     */
+    public ResultSet topAccumulatedRankProductsByDayOnMonth(int month, int year) {
+        try {
+
+            String sql = "SELECT P.ProductName, RANK() OVER(ORDER BY SUM(OD.quantity) DESC) rank,"
+                    + " SUM(OD.quantity), AVG(OD.UnitPrice), SUM(OD.quantity * OD.UnitPrice)"
+                    + " FROM Orders O, Order_Details OD, Products P"
+                    + " WHERE date_part('month', O.OrderDate) = ? AND date_part('year', O.OrderDate) = ?"
+                    + " AND O.OrderId = OD.OrderId"
+                    + " AND P.ProductID = OD.ProductID"
+                    + " GROUP BY P.ProductName"
+                    + " ORDER BY rank";
+
+            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            stmt.setInt(1, month);
+            stmt.setInt(2, year);
+            return stmt.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Query de ranking acumulado decrescente de vendas produtos de cada dia em um mes
+     *
+     * @param month
+     * @param year
+     * @return
+     */
+    public ResultSet downRankAccumulatedProductsByDayOnMonth(int month, int year) {
+        try {
+
+            String sql = "SELECT P.ProductName, RANK() OVER(ORDER BY SUM(OD.quantity) ASC) rank,"
+                    + " SUM(OD.quantity), AVG(OD.UnitPrice), SUM(OD.quantity * OD.UnitPrice)"
+                    + " FROM Orders O, Order_Details OD, Products P"
+                    + " WHERE date_part('month', O.OrderDate) = ? AND date_part('year', O.OrderDate) = ?"
+                    + " AND O.OrderId = OD.OrderId"
+                    + " AND P.ProductID = OD.ProductID"
+                    + " GROUP BY P.ProductName"
+                    + " ORDER BY rank";
+
+            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            stmt.setInt(1, month);
+            stmt.setInt(2, year);
+            return stmt.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -29,7 +29,7 @@ public class App {
 //            printQuery(task.ordersByDayOnMonth(month, year));
 //            printQuery(task.rankByDayOnMonth(month, year));
 //            printQuery(task.topTenProducts(day, month, year));
-            printQuery(task.downRankProductsByDayOnMonth(day, month, year));
+            printQuery(task.downRankAccumulatedProductsByDayOnMonth(month, year));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

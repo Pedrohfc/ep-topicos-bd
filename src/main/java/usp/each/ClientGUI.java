@@ -133,19 +133,19 @@ public class ClientGUI extends JPanel {
 				try {
 					
 					OrderTask task = new OrderTask();
-		            String year = "", month = "", day = "";
+		            int year=0, month=0, day=0;
 					
 		            try {
-			            year = (String) cboAno.getSelectedItem();
+			            year = new Integer((String) cboAno.getSelectedItem());
 			            
 					} catch (Exception e2) {}
 		            
 		            try {
-			            month = (String) cboMes.getSelectedItem();
+			            month = new Integer((String) cboMes.getSelectedItem());
 					} catch (Exception e2) {}
 
 					try {
-			            day = (String) cboDia.getSelectedItem();
+			            day = new Integer((String) cboDia.getSelectedItem());
 					} catch (Exception e2) {}
 		            
 					//System.out.println("Ano: " + year);
@@ -155,52 +155,52 @@ public class ClientGUI extends JPanel {
 					
 					switch (consultaSelecionada) {
 					case 1:
-						rs = task.ordersByDayOnMonthConsideringSellsAsProductsSoldQuantity(Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.ordersByDayOnMonthConsideringSellsAsProductsSoldQuantity(month, year);
 						printQuery(rs, false);
 						break;
 					case 2:
-						rs = task.rankOrdersByDayOnMonthConsideringSellsAsProductsSoldQuantity(Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.rankOrdersByDayOnMonthConsideringSellsAsProductsSoldQuantity(month, year);
 						printQuery(rs, false);
 						break;
 					case 3:
-						rs = task.rankOrdersByDayOnMonthConsideringSellsAsProductsSoldQuantity(Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.rankOrdersByDayOnMonthConsideringSellsAsProductsSoldQuantity(month, year);
 						printQuery(rs, true);
 						break;
 					case 4:
-						rs = task.topRankProductsByDayOnMonth(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.topRankProductsByDayOnMonth(day, month, year);
 						printQuery(rs, false);
 						break;
 					case 5:
-						rs = task.downRankProductsByDayOnMonth(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.downRankProductsByDayOnMonth(day, month, year);
 						printQuery(rs, false);
 						break;
 					case 6:
-						rs = task.topAccumulatedRankProductsByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.topAccumulatedRankProductsByDayOnMonth(month, year);
 						printQuery(rs, false);
 						break;
 					case 7:
-						rs = task.downRankAccumulatedProductsByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.downRankAccumulatedProductsByDayOnMonth(month, year);
 						printQuery(rs, false);
 						break;
 					case 8:
-						rs = task.topRankCategoriesByDayOnMonth(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.topRankCategoriesByDayOnMonth(day, month, year);
 						printQuery(rs, false);
 						break;
 					case 9:
-						rs = task.downRankCategoriesByDayOnMonth(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.downRankCategoriesByDayOnMonth(day, month, year);
 						printQuery(rs, false);
 						break;
 					case 10:
-						rs = task.topAccumulatedRankCategoriesByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.topAccumulatedRankCategoriesByDayOnMonth(month, year);
 						printQuery(rs, false);
 						break;
 					case 11:
-						rs = task.downRankAccumulatedCategoriesByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
+						rs = task.downRankAccumulatedCategoriesByDayOnMonth(month, year);
 						printQuery(rs, false);
 						break;
 					case 12:
-					    ResultSet productsNotSold = task.productsNotSold(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
-					    printQuery(productsNotSold, false);
+						rs = task.productsNotSold(day, month, year);
+					    printQuery(rs, false);
 					    break;
 
 					default:

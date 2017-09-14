@@ -348,4 +348,69 @@ public class OrderTask {
             return null;
         }
     }
+
+
+    /**
+     * Query de ranking de vendas por categoria de cada dia em um mes
+     *
+     * @param month
+     * @param year
+     * @return
+     */
+    public ResultSet topRankCategoriesByDayOnMonth(int day, int month, int year) {
+        try {
+
+            String sql = "SELECT C.CategoryName, RANK() OVER(ORDER BY SUM(OD.quantity) DESC) rank,"
+                    + " SUM(OD.quantity), AVG(OD.UnitPrice), SUM(OD.quantity * OD.UnitPrice)"
+                    + " FROM Orders O, Order_Details OD, Products P, Categories C"
+                    + " WHERE date_part('month', O.OrderDate) = ? AND date_part('year', O.OrderDate) = ?"
+                    + " AND date_part('day', O.OrderDate) = ?"
+                    + " AND O.OrderId = OD.OrderId"
+                    + " AND P.ProductID = OD.ProductID"
+                    + " AND C.CategoryID = P.CategoryID"
+                    + " GROUP BY C.CategoryName"
+                    + " ORDER BY rank";
+
+            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            stmt.setInt(1, month);
+            stmt.setInt(2, year);
+            stmt.setInt(3, day);
+            return stmt.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Query de ranking decrescente de vendas por categoria de cada dia em um mes
+     *
+     * @param month
+     * @param year
+     * @return
+     */
+    public ResultSet downRankCategoriesByDayOnMonth(int day, int month, int year) {
+        try {
+
+            String sql = "SELECT C.CategoryName, RANK() OVER(ORDER BY SUM(OD.quantity) ASC) rank,"
+                    + " SUM(OD.quantity), AVG(OD.UnitPrice), SUM(OD.quantity * OD.UnitPrice)"
+                    + " FROM Orders O, Order_Details OD, Products P, Categories C"
+                    + " WHERE date_part('month', O.OrderDate) = ? AND date_part('year', O.OrderDate) = ?"
+                    + " AND date_part('day', O.OrderDate) = ?"
+                    + " AND O.OrderId = OD.OrderId"
+                    + " AND P.ProductID = OD.ProductID"
+                    + " AND C.CategoryID = P.CategoryID"
+                    + " GROUP BY C.CategoryName"
+                    + " ORDER BY rank";
+
+            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            stmt.setInt(1, month);
+            stmt.setInt(2, year);
+            stmt.setInt(3, day);
+            return stmt.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

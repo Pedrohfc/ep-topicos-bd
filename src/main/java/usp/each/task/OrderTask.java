@@ -6,7 +6,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
 
 public class OrderTask {
 	

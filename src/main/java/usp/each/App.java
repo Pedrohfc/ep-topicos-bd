@@ -1,7 +1,5 @@
 package usp.each;
 
-import java.sql.ResultSet;
-
 import javax.swing.JFrame;
 
 import usp.each.task.ConnectionFactory;

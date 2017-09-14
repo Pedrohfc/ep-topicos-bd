@@ -124,19 +124,19 @@ public class ClientGUI extends JPanel {
 				try {
 					
 					OrderTask task = new OrderTask();
-		            String year = "", month = "", day = "";
+		            int year=0, month=0, day=0;
 					
 		            try {
-			            year = (String) cboAno.getSelectedItem();
+			            year = new Integer((String) cboAno.getSelectedItem());
 			            
 					} catch (Exception e2) {}
 		            
 		            try {
-			            month = (String) cboMes.getSelectedItem();
+			            month = new Integer((String) cboMes.getSelectedItem());
 					} catch (Exception e2) {}
 
 					try {
-			            day = (String) cboDia.getSelectedItem();
+			            day = new Integer((String) cboDia.getSelectedItem());
 					} catch (Exception e2) {}
 		            
 					System.out.println("Ano: " + year);
@@ -145,11 +145,47 @@ public class ClientGUI extends JPanel {
 					
 					switch (consultaSelecionada) {
 					case 1:
-						ResultSet ordersByDayOnMonth = task.ordersByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
+						ResultSet ordersByDayOnMonth = task.ordersByDayOnMonth(month, year);
 						printQuery(ordersByDayOnMonth);
 						break;
+					case 2:
+					    ResultSet rankByDayOnMonth = task.rankByDayOnMonth(month, year);
+					    printQuery(rankByDayOnMonth);
+					    break;
+					case 4:
+					    ResultSet topTenProducts = task.topTenProducts(day, month, year);
+					    printQuery(topTenProducts);
+					    break;
+					case 5:
+					    ResultSet downTenProducts = task.downTenProducts(day, month, year);
+					    printQuery(downTenProducts);
+					    break;
+					case 6:
+					    ResultSet query6 = task.topAccumulatedRankProductsByDayOnMonth(month, year);
+					    printQuery(query6);
+					    break;
+					case 7:
+					    ResultSet query7 = task.downRankAccumulatedProductsByDayOnMonth(month, year);
+					    printQuery(query7);
+					    break;
+					case 8:
+					    ResultSet query8 = task.topRankCategoriesByDayOnMonth(day, month, year);
+					    printQuery(query8);
+					    break;
+					case 9:
+					    ResultSet query9 = task.downRankCategoriesByDayOnMonth(day, month, year);
+					    printQuery(query9);
+					    break;
+					case 10:
+					    ResultSet query10 = task.topAccumulatedRankCategoriesByDayOnMonth(month, year);
+					    printQuery(query10);
+					    break;
+					case 11:
+					    ResultSet query11 = task.downRankAccumulatedCategoriesByDayOnMonth(month, year);
+					    printQuery(query11);
+					    break;
 					case 12:
-					    ResultSet productsNotSold = task.productsNotSold(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+					    ResultSet productsNotSold = task.productsNotSold(day, month, year);
 					    printQuery(productsNotSold);
 					    break;
 
@@ -247,12 +283,12 @@ public class ClientGUI extends JPanel {
 		case 6:
 			cboAno.setEnabled(true);
 			cboMes.setEnabled(true);
-			cboDia.setEnabled(true);
+			cboDia.setEnabled(false);
 			break;
 		case 7:
 			cboAno.setEnabled(true);
 			cboMes.setEnabled(true);
-			cboDia.setEnabled(true);
+			cboDia.setEnabled(false);
 			break;
 		case 8:
 			cboAno.setEnabled(true);
@@ -267,12 +303,12 @@ public class ClientGUI extends JPanel {
 		case 10:
 			cboAno.setEnabled(true);
 			cboMes.setEnabled(true);
-			cboDia.setEnabled(true);
+			cboDia.setEnabled(false);
 			break;
 		case 11:
 			cboAno.setEnabled(true);
 			cboMes.setEnabled(true);
-			cboDia.setEnabled(true);
+			cboDia.setEnabled(false);
 			break;
 		case 12:
 			cboAno.setEnabled(true);

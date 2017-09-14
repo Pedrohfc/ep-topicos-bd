@@ -8,6 +8,25 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 
 public class OrderTask {
+	
+	/**
+     * Query auxiliar para trazer os distincts de data (dia, mes, ano)
+     *
+     * @return
+     */
+    public ResultSet getDistinctDateOrders(String tipo) {
+        try {
+            String sql = "SELECT DISTINCT date_part('" + tipo + "', o.OrderDate) as r FROM Orders o ORDER BY r";
+            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            return stmt.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+	
+	
+	
     /**
      * Query de vendas acumuladas de cada dia em um mes
      *
@@ -121,7 +140,7 @@ public class OrderTask {
     //NEW QUERIES
 
     /**
-     * Query de vendas acumuladas de cada dia em um mes considerando que as vendas são o valor monetário vendido
+     * Query de vendas acumuladas de cada dia em um mes considerando que as vendas sï¿½o o valor monetï¿½rio vendido
      *
      * @param month
      * @param year
@@ -148,7 +167,7 @@ public class OrderTask {
     }
 
     /**
-     * Query de vendas acumuladas de cada dia em um mes considerando que as vendas são a quantidade de produtos vendida
+     * Query de vendas acumuladas de cada dia em um mes considerando que as vendas sï¿½o a quantidade de produtos vendida
      *
      * @param month
      * @param year
@@ -175,7 +194,7 @@ public class OrderTask {
     }
 
     /**
-     * Query de ranking de vendas acumuladas de cada dia em um mes considerando que as vendas são a quantidade de produtos vendida
+     * Query de ranking de vendas acumuladas de cada dia em um mes considerando que as vendas sï¿½o a quantidade de produtos vendida
      *
      * @param month
      * @param year
@@ -202,7 +221,7 @@ public class OrderTask {
     }
 
     /**
-     * Query de ranking de vendas acumuladas de cada dia em um mes considerando que as vendas são o valor monetário vendido
+     * Query de ranking de vendas acumuladas de cada dia em um mes considerando que as vendas sï¿½o o valor monetï¿½rio vendido
      *
      * @param month
      * @param year

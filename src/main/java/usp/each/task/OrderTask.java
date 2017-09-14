@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
 public class OrderTask {
 	
@@ -486,6 +487,29 @@ public class OrderTask {
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, month);
             stmt.setInt(2, year);
+            return stmt.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    public ResultSet productsNotSold(int day, int month, int year) {
+        try {
+            String sql = " SELECT P.ProductName FROM Products P"
+                    + " WHERE P.ProductName NOT IN "
+                    + " (SELECT PR.ProductName"
+                    + " FROM (Products PR INNER JOIN Order_Details OD"
+                    + " ON PR.ProductID = OD.ProductID)"
+                    + " INNER JOIN Orders O ON OD.OrderID = O.OrderID"
+                    + " WHERE O.OrderDate > ? AND O.OrderDate <= ?)";
+            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date(formatter.parse(year+"-"+month+"-"+day).getTime());
+            Date dateBefore = new Date(formatter.parse(year+"-"+month+"-"+day).getTime()-7*24*60*60*1000);
+            stmt.setDate(1, dateBefore);
+            stmt.setDate(2, date);
+            System.out.println(stmt.toString());
             return stmt.executeQuery();
         } catch (Exception e) {
             e.printStackTrace();

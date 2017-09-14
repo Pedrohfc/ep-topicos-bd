@@ -148,6 +148,10 @@ public class ClientGUI extends JPanel {
 						ResultSet ordersByDayOnMonth = task.ordersByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
 						printQuery(ordersByDayOnMonth);
 						break;
+					case 12:
+					    ResultSet productsNotSold = task.productsNotSold(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+					    printQuery(productsNotSold);
+					    break;
 
 					default:
 						break;

@@ -1,5 +1,12 @@
 package usp.each;
 
+import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.stage.Stage;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -41,6 +48,8 @@ public class ClientGUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
+	
+	static GraphicResult gr;
 	
 	static int consultaSelecionada;
 	static JComboBox<String> cboConsultas;
@@ -139,18 +148,59 @@ public class ClientGUI extends JPanel {
 			            day = (String) cboDia.getSelectedItem();
 					} catch (Exception e2) {}
 		            
-					System.out.println("Ano: " + year);
-					System.out.println("Mes: " + month);
-					System.out.println("Dia: " + day);
+					//System.out.println("Ano: " + year);
+					//System.out.println("Mes: " + month);
+					//System.out.println("Dia: " + day);
+					ResultSet rs = null;
 					
 					switch (consultaSelecionada) {
 					case 1:
-						ResultSet ordersByDayOnMonth = task.ordersByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
-						printQuery(ordersByDayOnMonth);
+						rs = task.ordersByDayOnMonthConsideringSellsAsProductsSoldQuantity(Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, false);
+						break;
+					case 2:
+						rs = task.rankOrdersByDayOnMonthConsideringSellsAsProductsSoldQuantity(Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, false);
+						break;
+					case 3:
+						rs = task.rankOrdersByDayOnMonthConsideringSellsAsProductsSoldQuantity(Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, true);
+						break;
+					case 4:
+						rs = task.topRankProductsByDayOnMonth(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, false);
+						break;
+					case 5:
+						rs = task.downRankProductsByDayOnMonth(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, false);
+						break;
+					case 6:
+						rs = task.topAccumulatedRankProductsByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, false);
+						break;
+					case 7:
+						rs = task.downRankAccumulatedProductsByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, false);
+						break;
+					case 8:
+						rs = task.topRankCategoriesByDayOnMonth(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, false);
+						break;
+					case 9:
+						rs = task.downRankCategoriesByDayOnMonth(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, false);
+						break;
+					case 10:
+						rs = task.topAccumulatedRankCategoriesByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, false);
+						break;
+					case 11:
+						rs = task.downRankAccumulatedCategoriesByDayOnMonth(Integer.parseInt(month), Integer.parseInt(year));
+						printQuery(rs, false);
 						break;
 					case 12:
 					    ResultSet productsNotSold = task.productsNotSold(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
-					    printQuery(productsNotSold);
+					    printQuery(productsNotSold, false);
 					    break;
 
 					default:
@@ -247,12 +297,12 @@ public class ClientGUI extends JPanel {
 		case 6:
 			cboAno.setEnabled(true);
 			cboMes.setEnabled(true);
-			cboDia.setEnabled(true);
+			cboDia.setEnabled(false);
 			break;
 		case 7:
 			cboAno.setEnabled(true);
 			cboMes.setEnabled(true);
-			cboDia.setEnabled(true);
+			cboDia.setEnabled(false);
 			break;
 		case 8:
 			cboAno.setEnabled(true);
@@ -267,12 +317,12 @@ public class ClientGUI extends JPanel {
 		case 10:
 			cboAno.setEnabled(true);
 			cboMes.setEnabled(true);
-			cboDia.setEnabled(true);
+			cboDia.setEnabled(false);
 			break;
 		case 11:
 			cboAno.setEnabled(true);
 			cboMes.setEnabled(true);
-			cboDia.setEnabled(true);
+			cboDia.setEnabled(false);
 			break;
 		case 12:
 			cboAno.setEnabled(true);
@@ -285,7 +335,7 @@ public class ClientGUI extends JPanel {
 		
 	}
 	
-	public void printQuery(ResultSet rs) throws Exception {
+	public void printQuery(ResultSet rs, boolean graph) throws Exception {
         
         String[] columnNames = new String[rs.getMetaData().getColumnCount()];
         
@@ -314,7 +364,22 @@ public class ClientGUI extends JPanel {
         	}
         }
         
-        TableResult tr = new TableResult(columnNames, data);
+        if(graph){
+        	gr = new GraphicResult();
+        	
+        	ArrayList<String> colums = new ArrayList<>();
+        	
+        	ArrayList<Double> result2 = new ArrayList<>();
+        	for(int i = 0; i < result.size(); i++){
+        		String[] g = result.get(i);
+        		colums.add(g[1]);
+        		result2.add(Double.valueOf(g[2]));
+        	}
+        	
+            gr.main(colums, result2);
+        }else{
+            TableResult tr = new TableResult(columnNames, data);
+        }
         
     }
 	

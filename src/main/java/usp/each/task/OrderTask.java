@@ -204,7 +204,7 @@ public class OrderTask {
     public ResultSet rankOrdersByDayOnMonthConsideringSellsAsProductsSoldQuantity(int month, int year) {
         try {
 
-            String sql = "SELECT O.OrderDate, RANK() OVER (ORDER BY SUM(OD.quantity)) rank"
+            String sql = "SELECT RANK() OVER (ORDER BY SUM(OD.quantity) desc) rank, O.OrderDate, SUM(OD.quantity)"
                     + " FROM Orders O, Order_Details OD"
                     + " WHERE date_part('month', O.OrderDate) = ? AND date_part('year', O.OrderDate) = ?"
                     + " AND O.OrderId = OD.OrderId"

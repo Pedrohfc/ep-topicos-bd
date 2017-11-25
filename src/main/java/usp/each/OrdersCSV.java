@@ -15,6 +15,7 @@ import usp.each.task.ConnectionFactory;
 public class OrdersCSV
 {
     Map<String, List<String>> ordersMap;
+    int max;
 
     public static void main(String[] args)
     {
@@ -38,6 +39,7 @@ public class OrdersCSV
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
             ordersMap = new HashMap<>();
+            max = 0;
             while (rs.next())
             {
                 String orderId = rs.getString(1);
@@ -46,8 +48,10 @@ public class OrdersCSV
                 {
                     ordersMap.put(orderId, new ArrayList<>());
                 }
+                List<String> order = ordersMap.get(orderId);
+                order.add(productName);
                 
-                ordersMap.get(orderId).add(productName);
+                max = Math.max(order.size(), max);
             }
             rs.close();
         }
@@ -76,6 +80,11 @@ public class OrdersCSV
                     out.print("\""+product+"\"");
                     
                     first = false;
+                }
+                
+                for (int i = 0; i < max-order.size(); i++)
+                {
+                    out.print(",");
                 }
                 out.println();
             }
